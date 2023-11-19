@@ -1,4 +1,5 @@
 const Product = require("../models/product");
+const Review = require("../models/review");
 
 // Create Product By Admin
 const createProduct = async (req, res) => {
@@ -41,7 +42,7 @@ const updateProduct = async (req, res) => {
       updateFields,
       { new: true }, // This option returns the updated document
       { validateModifyOnly: true }
-    );
+    ).populate("reviews");
 
     if (!product) {
       return res.status(404).json({
@@ -73,7 +74,7 @@ const getProductById = async (req, res) => {
     const productId = req.params.id;
 
     // Fetch the product from the database by ID
-    const product = await Product.findById(productId);
+    const product = await Product.findById(productId).populate("reviews");
 
     if (!product) {
       // If the product with the given ID is not found, return a 404 Not Found response
@@ -148,7 +149,8 @@ const getAllProducts = async (req, res) => {
     const products = await Product.find()
       .sort({ name: 1 }) // 1 for ASC order, -1 for DSC order
       .skip(skip)
-      .limit(perPage);
+      .limit(perPage)
+      .populate("reviews");
 
     return res.status(200).json({
       status: "success",
@@ -170,10 +172,26 @@ const getAllProducts = async (req, res) => {
 // Get Recommended Products for users
 const getRecommendedProducts = async (req, res) => {
   try {
+    // Find products by user's previous reviews
+    const user = req.user;
+
+    const reviews = await Review.find({
+      user: user._id,
+    });
+
+    const products = await reviews.map((review) => review.product);
+    const reviewedProducts = await Product.find({
+      _id: { $in: products },
+    }).select("category");
+    const categories = reviewedProducts.map((p) => p.category);
+
     // Find products sorted by overall_rating in DSC order
-    const recommendedProducts = await Product.find()
+    const recommendedProducts = await Product.find({
+      category: { $in: categories },
+    })
       .sort({ overall_rating: -1, name: 1 })
-      .limit(5);
+      .limit(2)
+      .populate("reviews");
 
     res.status(200).json({
       status: "success",

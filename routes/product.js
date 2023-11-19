@@ -18,7 +18,7 @@ const {
 
 // Product routes
 router.get("/", getAllProducts);
-router.get("/recommendations", getRecommendedProducts);
+router.get("/recommendations", protect, getRecommendedProducts);
 router.get("/:id", getProductById);
 router.post("/", protect, isAdmin, createProduct);
 router.patch("/:id", protect, isAdmin, updateProduct);

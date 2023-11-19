@@ -16,7 +16,7 @@ const getReviews = async (req, res) => {
       });
     }
 
-    const reviews = await Review.find({ _id: {$in: product.reviews}});
+    const reviews = await Review.find({ _id: {$in: product.reviews}}).populate("user product");
 
     res.status(200).json({
       status: "success",
@@ -48,7 +48,7 @@ const postReview = async (req, res) => {
     const { rating, comment } = req.body;
 
     // Search the product
-    const product = await Product.findById(productId);
+    const product = await Product.findById(productId).populate("reviews");
     if (!product) {
       return res.status(404).json({
         status: "Error",
@@ -145,10 +145,12 @@ const updateReview = async (req, res) => {
         await product.save();
       }
 
+      const updatedProduct = await Product.findById(product._id).populate("reviews");
+
       res.status(200).json({
         status: "success",
         data: {
-          product,
+          product: updatedProduct,
           review: updatedReview,
         },
       });
