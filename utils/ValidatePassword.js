@@ -2,7 +2,7 @@ const validatePassword = (password) => {
   var minNumberofChars = 8;
   var maxNumberofChars = 16;
   var regularExpression =
-    /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,16}$/;
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
   if (
     password.length < minNumberofChars ||
     password.length > maxNumberofChars
@@ -17,12 +17,12 @@ const validatePassword = (password) => {
     return {
       status: "Error",
       message:
-        "Password must contain atleast one number and one special character!",
+        "Password must include at least one lowercase letter, one uppercase letter, one number, and one special character.",
     };
   }
   return {
     status: "Success",
-    message: "Password is okay!"
+    message: "Password is okay!",
   };
 };
 

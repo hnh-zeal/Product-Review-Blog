@@ -45,9 +45,8 @@ const registerAdmin = async (req, res) => {
       password,
       role: "admin",
       verified: true,
+      status: "Online", // Set Status to Online assuming that registeration makes online to the user
     });
-
-    // Set Status to Online assuming that registeration makes online to the user
 
     return res.status(200).json({
       status: "Success",
@@ -96,6 +95,7 @@ const register = async (req, res) => {
       userName,
       password,
       role: "user",
+      status: "Online",
     });
 
     return res.status(200).json({
@@ -291,16 +291,15 @@ const protect = async (req, res, next) => {
   const this_user = await User.findById(decoded.userId);
 
   if (!this_user) {
-    res.status(400).json({
+    return res.status(400).json({
       status: "error",
       message: "The user does not exist!",
     });
-    return;
   }
 
   // Check if user changed their password after token was issued
   if (this_user.changedPasswordAfter(decoded.iat)) {
-    res.status(404).json({
+    return res.status(404).json({
       status: "Error",
       message: "User recently updated password! Please log in again!",
     });
