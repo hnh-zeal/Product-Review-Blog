@@ -1,19 +1,18 @@
+// JWT
 const jwt = require("jsonwebtoken");
-const otpGenerator = require("otp-generator");
-const otpTemplate = require("../utils/Templates/otp");
-const resetPswTemplate = require("../utils/Templates/resetPassword");
-const mailService = require("../utils/mailer");
-const crypto = require("crypto");
+const signToken = (userId) => jwt.sign({ userId }, process.env.JWT_SECRET);
+
 const bcrypt = require("bcryptjs");
+const otpGenerator = require("otp-generator");
 
 // Model
 const User = require("../models/user");
 
 // Utils
 const { promisify } = require("util");
+const otpTemplate = require("../utils/Templates/otp");
+const mailService = require("../utils/mailer");
 const validatePassword = require("../utils/ValidatePassword");
-
-const signToken = (userId) => jwt.sign({ userId }, process.env.JWT_SECRET);
 
 // Check if logged-in user is Admin or not
 const isAdmin = (req, res, next) => {
@@ -83,7 +82,6 @@ const register = async (req, res) => {
         "You have registered, but not verfied! Please Verify with your email!",
     });
   } else {
-    
     // Password Validation
     const { status, message } = validatePassword(password);
     if (status === "Error") {
@@ -265,93 +263,6 @@ const logout = async (req, res) => {
   }
 };
 
-const forgotPassword = async (req, res) => {
-  // Get User Email
-  const user = await User.findOne({ email: req.body.email });
-  if (!user) {
-    return res.status(400).json({
-      status: "error",
-      message: "There is no user with given email address",
-    });
-  }
-
-  // Generate Random Reset Token
-  const resetToken = await user.createPasswordResetToken();
-  await user.save({ validateBeforeSave: false });
-
-  try {
-    const resetURL = `http://localhost:3000/auth/new-password?token=${resetToken}`;
-
-    // Send Email With Reset URL
-    await mailService
-      .sendEmail({
-        from: "htetnainghein7777@gmail.com",
-        to: user.email,
-        subject: "Reset Password",
-        html: resetPswTemplate(user.firstName, resetURL),
-        attachments: [],
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-
-    res.status(200).json({
-      status: "success",
-      message: "Reset Password Link sent to Email!",
-    });
-  } catch (error) {
-    user.passwordResetToken = undefined;
-    user.passwordResetExpires = undefined;
-
-    await user.save({ validateBeforeSave: false });
-
-    res.status(500).json({
-      status: "error",
-      message: "There was an error sending the email, Please Try Again Later!",
-    });
-  }
-};
-
-const resetPassword = async (req, res) => {
-  console.log(req.body.token);
-  // Get User based on Token
-  const hashedToken = crypto
-    .createHash("sha256")
-    .update(req.body.token)
-    .digest("hex");
-
-  console.log(hashedToken);
-  const user = await User.findOne({
-    passwordResetToken: hashedToken,
-    passwordResetExpires: { $gt: Date.now() },
-  });
-
-  // If Token has expired or Submitted token out of time
-  if (!user) {
-    return res.status(400).json({
-      status: "Error",
-      message: "Token is invalid or expired!",
-    });
-  }
-
-  // Update User's password and set resetToken & expiry_time to undefined
-  user.password = req.body.password;
-  user.confirmPassword = undefined;
-  user.passwordResetToken = undefined;
-  user.passwordResetExpires = undefined;
-
-  await user.save();
-
-  // TODO => send an email to user informing about password change
-  const token = signToken(user._id);
-
-  res.status(200).json({
-    status: "Success",
-    message: "Password Reset Sucessfully!",
-    token,
-  });
-};
-
 // Middleware to check the token is valid or not
 const protect = async (req, res, next) => {
   // Getting JWT Token and check if it's there
@@ -408,6 +319,4 @@ module.exports = {
   sendOTP,
   verifyOTP,
   logout,
-  forgotPassword,
-  resetPassword,
 };
