@@ -1,0 +1,593 @@
+{
+	"info": {
+		"_postman_id": "5b068f4f-c1d5-4c03-a28e-49cb1fba1670",
+		"name": "Product Review Blog",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "15996888"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"userName\": \"hnh\",\n    \"password\": \"123\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/auth/login",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Register",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"userName\": \"zeal\",\n    \"password\": \"HNHzeal@123\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/auth/register",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"auth",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Register Admin",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"userName\": \"admin\",\n    \"password\": \"123\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/auth/register-admin",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"auth",
+								"register-admin"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Verify OTP",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NTU3OTA0M2Y1MjFkMDdlYjUwMmIyMmMiLCJpYXQiOjE3MDA0MDQyMjh9.eslA4EvJwKjgt2sYiCqHJE7pNW-ngOc1syh5H1k9UG8",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"otp\": \"857982\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/auth/verify",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"auth",
+								"verify"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Send OTP",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NTU3OTA0M2Y1MjFkMDdlYjUwMmIyMmMiLCJpYXQiOjE3MDA0MDQyMjh9.eslA4EvJwKjgt2sYiCqHJE7pNW-ngOc1syh5H1k9UG8",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"htetnainghein2001@gmail.com\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/auth/send-otp",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"auth",
+								"send-otp"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Forgot Password",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/auth/forgot-password",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"auth",
+								"forgot-password"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Logout",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NTU3OTA0M2Y1MjFkMDdlYjUwMmIyMmMiLCJpYXQiOjE3MDAzMTA2NDB9.DT3rJksFNBe7y0S1O-Wc1kkuSSdcKt_6L0IgpvolEx4",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/auth/logout",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"auth",
+								"logout"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Product",
+			"item": [
+				{
+					"name": "Create Product",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NTU3OTA0ZWY1MjFkMDdlYjUwMmIyMzEiLCJpYXQiOjE3MDAzMDQ4MjZ9.R2ODvhmbnEN2Omf4f_ICY-buUBLmLigli8eEtraiLwY",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"MSI Modern 15\",\n    \"description\": \"MSI Brand\",\n    \"category\": \"Laptop\",\n    \"price\": 899,\n    \"currency\": \"$\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/products",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"products"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Product",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NTU3OTA0ZWY1MjFkMDdlYjUwMmIyMzEiLCJpYXQiOjE3MDAzMDc3OTV9.d26yUg0mvQGOQkhSeMK9CShq0iDIWlEtK_mJWlsHSAY",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"description\": \"Lenovo Brand\",\n    \"category\": \"Laptop\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/products/6558d2adb3aad84135ab3bd5",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"products",
+								"6558d2adb3aad84135ab3bd5"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Products",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/products?page=6&perPage=1",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"products"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "6"
+								},
+								{
+									"key": "perPage",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Product By Id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/products/6557aed8826f8428c16106e7",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"products",
+								"6557aed8826f8428c16106e7"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Recommended Product",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NTU3OTA0M2Y1MjFkMDdlYjUwMmIyMmMiLCJpYXQiOjE3MDAzMDQ2NTh9.xQATaEh2Z93KLTrbhnyVPpWoM6wpeS-9BmghhHEELFE",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/products/recommendations",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"products",
+								"recommendations"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Product",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NTU3OTA0ZWY1MjFkMDdlYjUwMmIyMzEiLCJpYXQiOjE3MDAzMTg4NTd9.G91KF3qJr3ORbnypYjPU_6ec_oYlA7OTzpcP6sf_FZM",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/products/6557aed8826f8428e16106e3",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"products",
+								"6557aed8826f8428e16106e3"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "Get Profile",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NTU3OTA0M2Y1MjFkMDdlYjUwMmIyMmMiLCJpYXQiOjE3MDAzMTc1MjF9.4Zj6DlNoYNd36BdThb87QI2zEueQyHtUnDWrQlB-Dds",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/user/get-profile",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"user",
+								"get-profile"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Profile",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NTU3OTA0M2Y1MjFkMDdlYjUwMmIyMmMiLCJpYXQiOjE3MDAzMjMzMTB9.U3gkI9zkoaO6Ci62gLd9NcqWNoeCUQlY94hark1rBL8",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"password\": \"123\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/user/update-profile",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"user",
+								"update-profile"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Review",
+			"item": [
+				{
+					"name": "Post Review",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NTU4Y2FmMGUyY2FlNzEwNWZmYThkNDQiLCJpYXQiOjE3MDA0MDU4MTZ9.ZIknrC8RHHt7rW7zEr0YNAwuTK7Qn1Ogyg5cA7Y5kR8",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NTU3OTA0M2Y1MjFkMDdlYjUwMmIyMmMiLCJpYXQiOjE3MDA0MDU4NzJ9.zeZV_JdZTqVSnP4Lq3rtkYF2Yt2f12QsZ1fcfuZf3sU",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NTU3OTA0ZWY1MjFkMDdlYjUwMmIyMzEiLCJpYXQiOjE3MDAzMjU4OTF9.0-0mXy2JH-Z3jqv4QeBB15ll6RuVzKyYTQ1rtpuJYFc",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"rating\": 4,\n    \"comment\": \"HNH Reviewing MSI Modern 15.\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/products/6558d316b3aad84135ab3be4/reviews",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"products",
+								"6558d316b3aad84135ab3be4",
+								"reviews"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Review",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NTU3OTA0ZWY1MjFkMDdlYjUwMmIyMzEiLCJpYXQiOjE3MDAzMjk5NzR9.mbzQbHtuTdRCxJPV_KUTJ8zDFDZWvQNrHxB86EP1tFs",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"rating\": 4.8,\n    \"comment\": \"Ratied by Adminnn\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/products/6557aed8826f8428c16106e7/reviews/6558e9b9b9b503ea1b9bf248",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"products",
+								"6557aed8826f8428c16106e7",
+								"reviews",
+								"6558e9b9b9b503ea1b9bf248"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Reviews",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/products/6557aed8826f8428c16106e7/reviews",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"products",
+								"6557aed8826f8428c16106e7",
+								"reviews"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Review",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NTU3OTA0M2Y1MjFkMDdlYjUwMmIyMmMiLCJpYXQiOjE3MDAzMzEwODJ9.a4kznYnXmdORagckK3xpMh5gKHzXCnlmYnSGB1eCa2Q",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NTU3OTA0ZWY1MjFkMDdlYjUwMmIyMzEiLCJpYXQiOjE3MDAzMzE2MjV9.KCzexfrS2GgtHPkaV_ce806OQnVqfKPlbnPlkwBtcBA",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/products/6557aed8826f8428c16106e7/reviews/6558e9adb9b503ea1b9bf241",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"products",
+								"6557aed8826f8428c16106e7",
+								"reviews",
+								"6558e9adb9b503ea1b9bf241"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
