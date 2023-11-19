@@ -54,7 +54,7 @@ For detailed API documentation, refer to the [API Documentation](docs/API.md).
 
 ## ERD Diagram
 
-![ERD Diagram](docs/erd.png)
+![ERD Diagram](docs/utils/Images/ERD.png)
 
 The Entity-Relationship Diagram (ERD) illustrates the overall structure and relationships in the system.
 

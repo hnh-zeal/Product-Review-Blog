@@ -1,7 +1,5 @@
 const User = require("../models/user");
 const bcrypt = require("bcryptjs");
-const catchAsync = require("../utils/catchAsync");
-const filterObj = require("../utils/filterObject");
 
 const getUserProfile = async (req, res) => {
   res.status(200).json({

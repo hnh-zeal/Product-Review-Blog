@@ -36,6 +36,13 @@ const getReviews = async (req, res) => {
 // Post Review on the Product
 const postReview = async (req, res) => {
   try {
+    if (req.user.verified === false) {
+      return res.status(404).json({
+        status: "Error",
+        message: "You are not verified yet!",
+      });
+    }
+
     const productId = req.params.productId;
 
     const { rating, comment } = req.body;

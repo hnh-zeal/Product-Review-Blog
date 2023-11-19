@@ -5,7 +5,12 @@ const crypto = require("crypto");
 
 const userSchema = new mongoose.Schema(
   {
-    role: { type: String, enum: ["user", "admin"], default: "user" },
+    role: {
+      type: String,
+      required: [true, "Role is required!"],
+      enum: ["user", "admin"],
+      default: "user",
+    },
     userName: {
       type: String,
       unique: true,
@@ -58,18 +63,6 @@ const userSchema = new mongoose.Schema(
 
 userSchema.plugin(uniqueValidator, {
   message: "Error, expected {PATH} to be unique.",
-});
-
-userSchema.pre("save", async function (next) {
-  // Only Run this function if OTP is updated
-  if (!this.isModified("otp") || !this.otp) return next();
-
-  // Hash the OTP with the cost of 12
-  this.otp = await bcrypt.hash(this.otp.toString(), 12);
-
-  // console.log(this.otp.toString(), "FROM PRE SAVE HOOK");
-
-  next();
 });
 
 userSchema.pre("save", async function (next) {

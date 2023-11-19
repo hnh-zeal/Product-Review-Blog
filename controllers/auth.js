@@ -4,12 +4,14 @@ const otpTemplate = require("../utils/Templates/otp");
 const resetPswTemplate = require("../utils/Templates/resetPassword");
 const mailService = require("../utils/mailer");
 const crypto = require("crypto");
+const bcrypt = require("bcryptjs");
 
 // Model
 const User = require("../models/user");
 
 // Utils
 const { promisify } = require("util");
+const validatePassword = require("../utils/ValidatePassword");
 
 const signToken = (userId) => jwt.sign({ userId }, process.env.JWT_SECRET);
 
@@ -47,7 +49,6 @@ const registerAdmin = async (req, res) => {
     });
 
     // Set Status to Online assuming that registeration makes online to the user
-    
 
     return res.status(200).json({
       status: "Success",
@@ -82,11 +83,23 @@ const register = async (req, res) => {
         "You have registered, but not verfied! Please Verify with your email!",
     });
   } else {
+    
+    // Password Validation
+    const { status, message } = validatePassword(password);
+    if (status === "Error") {
+      return res.status(400).json({
+        status: status,
+        message: message,
+      });
+    }
+
     // create if no user matches with the userName verified
     const new_user = await User.create({
       userName,
       password,
+      role: "user",
     });
+
     return res.status(200).json({
       status: "Error",
       message: "Registered Successfully!",
@@ -97,8 +110,9 @@ const register = async (req, res) => {
 
 // Send OTP
 const sendOTP = async (req, res) => {
-  const { userId, email } = req;
-  console.log(userId);
+  const userId = req.user._id;
+  const { email } = req.body;
+
   const new_otp = otpGenerator.generate(6, {
     lowerCaseAlphabets: false,
     upperCaseAlphabets: false,
@@ -107,11 +121,13 @@ const sendOTP = async (req, res) => {
 
   const otp_expiry_time = Date.now() + 10 * 60 * 1000; // 10 minutes after OTP is sent
 
+  const otp = await bcrypt.hash(new_otp.toString(), 12);
+
   const user = await User.findByIdAndUpdate(
     userId,
     {
       email,
-      otp: new_otp.toString(),
+      otp,
       otp_expiry_time,
     },
     { new: true, validateModifiedOnly: true }
@@ -123,7 +139,7 @@ const sendOTP = async (req, res) => {
       from: "htetnainghein7777@gmail.com",
       to: user.email,
       subject: "Verification OTP",
-      html: otpTemplate(user?.firstName, new_otp),
+      html: otpTemplate(user.userName, new_otp),
       attachments: [],
     })
     .catch((error) => {
@@ -140,12 +156,11 @@ const sendOTP = async (req, res) => {
 const verifyOTP = async (req, res) => {
   // verify OTP and update User record accordingly
 
-  const { email, otp } = req.body;
-
-  console.log("Requested Email", email);
+  const userId = req.user._id;
+  const { otp } = req.body;
 
   const user = await User.findOne({
-    email,
+    _id: userId,
     otp_expiry_time: { $gt: Date.now() },
   });
 
@@ -235,7 +250,7 @@ const logout = async (req, res) => {
 
     await User.findByIdAndUpdate(userId, { status: "Offline" });
 
-    res.clearCookie('jwt');  // Clear the JWT cookie
+    res.clearCookie("jwt"); // Clear the JWT cookie
 
     res.status(200).json({
       status: "success",
@@ -326,8 +341,6 @@ const resetPassword = async (req, res) => {
   user.passwordResetExpires = undefined;
 
   await user.save();
-
-  // Log in to user and Send new JWT
 
   // TODO => send an email to user informing about password change
   const token = signToken(user._id);

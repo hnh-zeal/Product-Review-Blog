@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-const Review = require("./review");
 const uniqueValidator = require("mongoose-unique-validator");
 
 const productSchema = new mongoose.Schema(
@@ -21,8 +20,10 @@ const productSchema = new mongoose.Schema(
       required: true,
     },
     currency: String,
-    quantityInStock: Number,
-    images: [String],
+    quantityInStock: {
+      type: Number,
+      default: 0,
+    },
     overall_rating: {
       type: Number,
       default: 0,
