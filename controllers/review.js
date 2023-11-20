@@ -16,7 +16,9 @@ const getReviews = async (req, res) => {
       });
     }
 
-    const reviews = await Review.find({ _id: {$in: product.reviews}}).populate("user product");
+    const reviews = await Review.find({
+      _id: { $in: product.reviews },
+    }).populate("user product");
 
     res.status(200).json({
       status: "success",
@@ -33,7 +35,83 @@ const getReviews = async (req, res) => {
   }
 };
 
-// Post Review on the Product
+// Post Review on the multiple Products
+const batchReviews = async (req, res) => {
+  try {
+    if (!req.user.verified) {
+      return res.status(404).json({
+        status: "Error",
+        message: "You are not verified yet!",
+      });
+    }
+
+    const { productIds, review } = req.body;
+
+    const products = await Product.find({ _id: { $in: productIds } }).populate(
+      "reviews"
+    );
+
+    if (products.length !== productIds.length) {
+      return res.status(404).json({
+        status: "error",
+        message: "One or more products are not found",
+      });
+    }
+
+    const savedReviews = await Promise.all(
+      productIds.map(async (productId) => {
+        const product = products.find((p) => p._id.equals(productId));
+        let foundReview = await Review.findOne({
+          user: req.user._id,
+          product: product._id,
+        });
+
+        let newReview; // Declare newReview outside the if block
+
+        if (foundReview) {
+          // Update existing review
+          foundReview.rating = review.rating;
+          foundReview.comment = review.comment;
+
+          await foundReview.save();
+        } else {
+          // Create a new review
+          newReview = await Review.create({
+            user: req.user._id,
+            product: product._id,
+            rating: review.rating,
+            comment: review.comment,
+          });
+
+          product.reviews.push(newReview);
+        }
+
+        // Update overall rating and save the product
+        product.overall_rating = await calculateOverallRating(product.reviews);
+        await product.save();
+
+        return foundReview || newReview;
+      })
+    );
+
+    return res.status(201).json({
+      status: "success",
+      data: {
+        products: products,
+        reviews: savedReviews,
+      },
+      message: "Reviews and ratings submitted successfully!",
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      status: "error",
+      error: "Internal Server Error",
+    });
+  }
+};
+
+// Post Review on the specific Product
 const postReview = async (req, res) => {
   try {
     if (req.user.verified === false) {
@@ -145,7 +223,9 @@ const updateReview = async (req, res) => {
         await product.save();
       }
 
-      const updatedProduct = await Product.findById(product._id).populate("reviews");
+      const updatedProduct = await Product.findById(product._id).populate(
+        "reviews"
+      );
 
       res.status(200).json({
         status: "success",
@@ -215,4 +295,10 @@ const deleteReview = async (req, res) => {
   }
 };
 
-module.exports = { getReviews, postReview, updateReview, deleteReview };
+module.exports = {
+  getReviews,
+  batchReviews,
+  postReview,
+  updateReview,
+  deleteReview,
+};

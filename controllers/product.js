@@ -179,19 +179,30 @@ const getRecommendedProducts = async (req, res) => {
       user: user._id,
     });
 
-    const products = await reviews.map((review) => review.product);
-    const reviewedProducts = await Product.find({
-      _id: { $in: products },
-    }).select("category");
-    const categories = reviewedProducts.map((p) => p.category);
+    let recommendedProducts;
 
-    // Find products sorted by overall_rating in DSC order
-    const recommendedProducts = await Product.find({
-      category: { $in: categories },
-    })
-      .sort({ overall_rating: -1, name: 1 })
-      .limit(2)
-      .populate("reviews");
+    if (reviews.length === 0) {
+      // Find products sorted by overall_rating in DSC order
+      recommendedProducts = await Product.find()
+        .sort({ overall_rating: -1, name: 1 })
+        .limit(3)
+        .populate("reviews");
+    } else {
+      // Find products from user's reviews
+      const products = reviews.map((review) => review.product);
+      const reviewedProducts = await Product.find({
+        _id: { $in: products },
+      }).select("category");
+      const categories = reviewedProducts.map((p) => p.category);
+
+      // Find products sorted by overall_rating in DSC order
+      recommendedProducts = await Product.find({
+        category: { $in: categories },
+      })
+        .sort({ overall_rating: -1, name: 1 })
+        .limit(3)
+        .populate("reviews");
+    }
 
     res.status(200).json({
       status: "success",
@@ -201,7 +212,7 @@ const getRecommendedProducts = async (req, res) => {
       },
     });
   } catch (error) {
-    //   console.error(error);
+    console.error(error);
     res.status(500).json({
       status: "error",
       msg: "Internal Server Error",

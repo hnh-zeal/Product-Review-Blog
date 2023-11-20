@@ -11,6 +11,7 @@ const {
 } = require("../controllers/product");
 const {
   getReviews,
+  batchReviews,
   postReview,
   updateReview,
   deleteReview,
@@ -27,6 +28,7 @@ router.delete("/:id", protect, isAdmin, deleteProduct);
 // Review routes
 router.get("/:productId/reviews", getReviews);
 router.post("/:productId/reviews", protect, postReview);
+router.post("/reviews/batch", protect, batchReviews);
 router.patch("/:productId/reviews/:reviewId", protect, updateReview);
 router.delete("/:productId/reviews/:reviewId", protect, isAdmin, deleteReview);
 
