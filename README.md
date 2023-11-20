@@ -47,6 +47,7 @@ The API provides the following endpoints:
 - **POST /login**: User login with username and password.
 - **GET /products**: Fetch all products with reviews and ratings.
 - **POST /products/:productId/reviews**: Submit a review for a specific product.
+  **POST /products/reviews/batch**: Submit a review for multiple products.
 - **GET /recommendations**: Get recommended products for the user.
 - **POST /logout**: Log out the user.
 
